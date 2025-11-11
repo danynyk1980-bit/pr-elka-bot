@@ -37,7 +37,6 @@ bot.onText(/\/start/, (msg) => {
 // Обработчик нажатия на кнопки
 bot.on('callback_query', (callbackQuery) => {
   const message = callbackQuery.message;
-  const chatId = message.chat.id;
   const data = callbackQuery.data;
 
   if (data === 'send_photo') {
@@ -62,18 +61,14 @@ bot.on('callback_query', (callbackQuery) => {
 
 // Обработчик фотографий
 bot.on('photo', (msg) => {
-  const chatId = msg.chat.id;
   const photo = msg.photo[msg.photo.length - 1];
   const fileId = photo.file_id;
 
   // Информация о пользователе (для админа)
-  const userName = msg.from.first_name || 'Неизвестный';
-  const userLastName = msg.from.last_name || '';
-  const username = msg.from.username ? `@${msg.from.username}` : 'нет';
-  const fullName = `${userName}${userLastName ? ' ' + userLastName : ''}`;
+   const fullName = `${userName}${userLastName ? ' ' + userLastName : ''}`;
 
   // Сообщение для администратора
-  const adminMessage = `📸 *НОВОЕ ФОТО ДЛЯ PR-ЁЛКИ!*\n\n👤 От: ${fullName}\n📱 Username: ${username}\n🆔 ID: ${chatId}\n⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
+  const adminMessage = `📸 *НОВОЕ ФОТО ДЛЯ PR-ЁЛКИ!*\n\n👤 От: ${fullName}\n📱 Username: ${username}\n⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
 
   // Отправляем фото администратору
   bot.sendPhoto(ADMIN_CHAT_ID, fileId, {
@@ -82,7 +77,7 @@ bot.on('photo', (msg) => {
   }).then(() => {
     // Подтверждение пользователю
     bot.sendMessage(chatId,
-      '✅ *Фото успешно получено! Спасибо за ваш вклад!*\n\nВаше фото будет рассмотрено для юбилейного ролика PR-Ёлки.\n\nМожете отправить еще фото или нажать /start для возврата в меню.',
+      '✅ *Фото успешно получено! Спасибо за ваш вклад!*\n\nМожете отправить еще фото или нажать /start для возврата в меню.',
       {
         parse_mode: 'Markdown',
         reply_markup: {
