@@ -9,10 +9,16 @@ const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID || '129488879';
 // Создаем бота
 const bot = new TelegramBot(BOT_TOKEN);
 
-// Автопинг чтобы Render не усыплял бота
+// 🔥 АВТОПИНГ - ДОБАВЬ ЗДЕСЬ 🔥
 setInterval(() => {
-  console.log('✅ Keep-alive:', new Date().toLocaleString('ru-RU'));
-}, 10 * 60 * 1000); // Каждые 10 минут
+  const now = new Date().toLocaleString('ru-RU');
+  console.log(`✅ Keep-alive ping: ${now}`);
+  
+  // Самопинг для дополнительной активности
+  axios.get(process.env.RENDER_URL || 'https://pr-elka-bot.onrender.com')
+    .then(() => console.log('✅ Self-ping successful'))
+    .catch(err => console.log('⚠️  Self-ping error:', err.message));
+}, 8 * 60 * 1000); // Каждые 8 минут
 
 // Настройка команд бота
 bot.setMyCommands([
@@ -124,10 +130,15 @@ bot.on('message', (msg) => {
 });
 
 // Веб-сервер для Render
-app.use(express.json());
 app.get('/', (req, res) => {
   console.log('🏓 Ping received:', new Date().toLocaleString('ru-RU'));
-  res.send('🎄 PR-Ёлка Bot is running!');
+  res.send('Bot is running!');
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server started on port ${PORT}`);
+  bot.startPolling();
 });
 
 const PORT = process.env.PORT || 3000;
