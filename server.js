@@ -9,6 +9,11 @@ const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID || '129488879';
 // Создаем бота
 const bot = new TelegramBot(BOT_TOKEN);
 
+// Автопинг чтобы Render не усыплял бота
+setInterval(() => {
+  console.log('✅ Keep-alive:', new Date().toLocaleString('ru-RU'));
+}, 10 * 60 * 1000); // Каждые 10 минут
+
 // Настройка команд бота
 bot.setMyCommands([
   {
@@ -121,6 +126,7 @@ bot.on('message', (msg) => {
 // Веб-сервер для Render
 app.use(express.json());
 app.get('/', (req, res) => {
+  console.log('🏓 Ping received:', new Date().toLocaleString('ru-RU'));
   res.send('🎄 PR-Ёлка Bot is running!');
 });
 
